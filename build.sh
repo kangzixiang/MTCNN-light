@@ -52,4 +52,6 @@ cmake ..
 
 make -j16
 
+#post build
 cp -r ../*net.txt ../products
+cp -r ../res ../products
