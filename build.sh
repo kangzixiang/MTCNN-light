@@ -51,3 +51,5 @@ parseArguments $@
 cmake ..
 
 make -j16
+
+cp -r ../*net.txt ../products
