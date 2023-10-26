@@ -30,14 +30,18 @@ It is very easy to install
 apt-get install cmake
 
 ## usage
+
+```
 cd root_directory   
-vim CMakeLists.txt   
+vim CMakeLists.txt
+``` 
 change   include_directories(the_directory_of_openblas_include_of_yours)  
 change   link_directories(the_directory_of_openblas_lib_of_yours)  
 save and exit
 
+```
 ./build.sh 
-
+```
 ## for windows    
 ### opencv and openblas    
 there is binary packages of openblas for windows, you just need download it   
