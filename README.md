@@ -20,11 +20,55 @@ openblas
 you can find many tutorials.
 
 ### openblas
-It is very easy to install  
+It is very easy to install
+
+**Install from source**
+
 1 download the source code from https://github.com/xianyi/OpenBLAS  
 2 Extract it and type "cd xxx", xxx means the directory  
 3 type "make"   
-4 type "make install PREFIX=your_installation_directory"   
+4 type "make install PREFIX=your_installation_directory"
+
+**Install by apt**
+```
+sudo apt-get install libopenblas-dev
+```
+or
+
+```
+sudo apt-cache search openblas
+```
+you will get the following message
+```
+dmrgpp - Density matrix renormalization group algorithm
+libblas-test - Basic Linear Algebra Subroutines 3, testing programs
+libblas64-test - Basic Linear Algebra Subroutines 3, testing programs (64bit-index)
+libjulia-openblas64 - Optimized BLAS (linear algebra) library (julia version)
+libopenblas-base - Optimized BLAS (linear algebra) library (transitional)
+libopenblas-dev - Optimized BLAS (linear algebra) library (dev, meta)
+libopenblas-openmp-dev - Optimized BLAS (linear algebra) library (dev, openmp)
+libopenblas-pthread-dev - Optimized BLAS (linear algebra) library (dev, pthread)
+libopenblas-serial-dev - Optimized BLAS (linear algebra) library (dev, serial)
+libopenblas0 - Optimized BLAS (linear algebra) library (meta)
+libopenblas0-openmp - Optimized BLAS (linear algebra) library (shared lib, openmp)
+libopenblas0-pthread - Optimized BLAS (linear algebra) library (shared lib, pthread)
+libopenblas0-serial - Optimized BLAS (linear algebra) library (shared lib, serial)
+libopenblas64-0 - Optimized BLAS (linear algebra) library (shared lib, 64bit, meta)
+libopenblas64-0-openmp - Optimized BLAS (linear algebra) library (shared lib, 64bit, openmp)
+libopenblas64-0-pthread - Optimized BLAS (linear algebra) library (shared lib, 64bit, pthread)
+libopenblas64-0-serial - Optimized BLAS (linear algebra) library (shared lib, 64bit, serial)
+libopenblas64-dev - Optimized BLAS (linear algebra) library (dev, 64bit, meta)
+libopenblas64-openmp-dev - Optimized BLAS (linear algebra) library (dev, 64bit, openmp)
+libopenblas64-pthread-dev - Optimized BLAS (linear algebra) library (dev, 64bit, pthread)
+libopenblas64-serial-dev - Optimized BLAS (linear algebra) library (dev, 64bit, serial)
+```
+Then choose a package you want to install by apt
+
+```
+sudo apt-get install libopenblas-dev
+#or
+sudo apt-get install libopenblas64-dev
+```
 
 ### if you don't have cmake 
 apt-get install cmake
