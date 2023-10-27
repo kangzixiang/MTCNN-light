@@ -73,7 +73,7 @@ sudo apt-get install libopenblas64-dev
 ### if you don't have cmake 
 apt-get install cmake
 
-## usage
+## Build
 
 ```
 cd root_directory   
@@ -86,6 +86,18 @@ save and exit
 ```
 ./build.sh 
 ```
+
+## How to Run
+```
+cd products
+
+# 1. run default
+./mtcnn
+
+# 2. run customize
+./mtcnn [image path]
+```
+
 ## for windows    
 ### opencv and openblas    
 there is binary packages of openblas for windows, you just need download it   
