@@ -53,5 +53,5 @@ cmake ..
 make -j16
 
 #post build
-cp -r ../*net.txt ../products
-cp -r ../res ../products
+cp -r ../*net.txt ../products/bin
+cp -r ../res ../products/bin
