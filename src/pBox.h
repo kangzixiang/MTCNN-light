@@ -4,12 +4,10 @@
 #include <iostream>
 
 using namespace std;
-#define mydataFmt float
-
 
 struct pBox
 {
-	mydataFmt *pdata;
+	float *pdata;
 	int width;
 	int height;
 	int channel;
@@ -17,14 +15,14 @@ struct pBox
 
 struct pRelu
 {
-    mydataFmt *pdata;
+    float *pdata;
     int width;
 };
 
 struct Weight
 {
-	mydataFmt *pdata;
-    mydataFmt *pbias;
+	float *pdata;
+    float *pbias;
     int lastChannel;
     int selfChannel;
 	int kernelSize;
@@ -41,13 +39,13 @@ struct Bbox
     int y2;
     float area;
     bool exist;
-    mydataFmt ppoint[10];
-    mydataFmt regreCoord[4];
+    float ppoint[10];
+    float regreCoord[4];
 };
 
 struct orderScore
 {
-    mydataFmt score;
+    float score;
     int oriOrder;
 };
 

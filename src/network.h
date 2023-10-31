@@ -16,16 +16,16 @@
 #include "pBox.h"
 using namespace cv;
 
-void addbias(struct pBox *pbox, mydataFmt *pbias);
+void addbias(struct pBox *pbox, float *pbias);
 void image2Matrix(const Mat &image, const struct pBox *pbox);
 void featurePad(const pBox *pbox, const pBox *outpBox, const int pad);
 void feature2Matrix(const pBox *pbox, pBox *Matrix, const Weight *weight);
 void maxPooling(const pBox *pbox, pBox *Matrix, int kernelSize, int stride);
-void relu(struct pBox *pbox, mydataFmt *pbias);
-void prelu(struct pBox *pbox, mydataFmt *pbias, mydataFmt *prelu_gmma);
+void relu(struct pBox *pbox, float *pbias);
+void prelu(struct pBox *pbox, float *pbias, float *prelu_gmma);
 void convolution(const Weight *weight, const pBox *pbox, pBox *outpBox, const struct pBox *matrix);
 void fullconnect(const Weight *weight, const pBox *pbox, pBox *outpBox);
-void readData(string filename, long dataNumber[], mydataFmt *pTeam[]);
+void readData(string filename, long dataNumber[], float *pTeam[]);
 long initConvAndFc(struct Weight *weight, int schannel, int lchannel, int kersize, int stride, int pad);
 void initpRelu(struct pRelu *prelu, int width);
 void softmax(const struct pBox *pbox);

@@ -15,7 +15,7 @@ os    windows10   64bit
 opencv  2.0+  
 openblas  
 
-##ubuntu   
+## ubuntu   
 ### opencv    
 you can find many tutorials.
 

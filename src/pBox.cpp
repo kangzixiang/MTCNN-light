@@ -30,7 +30,7 @@ void pBoxShow(const struct pBox *pbox){
 		return;
 	}
 	cout << "the data is :" << endl;
-	mydataFmt *p = pbox->pdata;
+	float *p = pbox->pdata;
 	//pbox->channel
 	for (int channel = 0; channel < pbox->channel; channel++){
 		cout << "the " << channel <<"th channel data is :"<< endl;
@@ -51,7 +51,7 @@ void pBoxShowE(const struct pBox *pbox,int channel, int row){
 		return;
 	}
 	cout << "the data is :" << endl;
-	mydataFmt *p = pbox->pdata + channel*pbox->width*pbox->height;
+	float *p = pbox->pdata + channel*pbox->width*pbox->height;
 	//pbox->channel
 	cout << "the " << channel <<"th channel data is :"<< endl;
 	//pbox->height
@@ -81,7 +81,7 @@ void pReluShow(const struct pRelu *prelu){
 		return;
 	}
 	cout << "the data is :" << endl;
-	mydataFmt *p = prelu->pdata;
+	float *p = prelu->pdata;
 	for (int i = 0; i < prelu->width; i++){
 			cout << *p++ << " ";
 		}
@@ -95,7 +95,7 @@ void weightShow(const struct Weight *weight){
 		return;
 	}
 	cout << "the weight data is :" << endl;
-	mydataFmt *p = weight->pdata;
+	float *p = weight->pdata;
 	for (int channel = 0; channel < weight->selfChannel; channel++){
 		cout << "the " << channel <<"th channel data is :"<< endl;
 		for (int i = 0; i < weight->lastChannel; i++){

@@ -1,6 +1,6 @@
 #include "network.h"
 
-void addbias(struct pBox *pbox, mydataFmt *pbias){
+void addbias(struct pBox *pbox, float *pbias){
     if (pbox->pdata == NULL){
         cout << "Relu feature is NULL!!" << endl;
         return;
@@ -9,8 +9,8 @@ void addbias(struct pBox *pbox, mydataFmt *pbias){
         cout << "the  Relu bias is NULL!!" << endl;
         return;
     }
-    mydataFmt *op = pbox->pdata;
-    mydataFmt *pb = pbias;
+    float *op = pbox->pdata;
+    float *pb = pbias;
 
     long dis = pbox->width*pbox->height;
     for(int channel =0;channel<pbox->channel; channel++){
@@ -30,9 +30,9 @@ void image2MatrixInit(Mat &image, struct pBox *pbox){
     pbox->height = image.rows;
     pbox->width = image.cols;
     
-    pbox->pdata = (mydataFmt *)malloc(pbox->channel*pbox->height*pbox->width*sizeof(mydataFmt));
+    pbox->pdata = (float *)malloc(pbox->channel*pbox->height*pbox->width*sizeof(float));
     if(pbox->pdata==NULL)cout<<"the image2MatrixInit failed!!"<<endl;
-    memset(pbox->pdata, 0, pbox->channel*pbox->height*pbox->width*sizeof(mydataFmt));
+    memset(pbox->pdata, 0, pbox->channel*pbox->height*pbox->width*sizeof(float));
 }
 void image2Matrix(const Mat &image, const struct pBox *pbox){
     if ((image.data == NULL) || (image.type() != CV_8UC3)){
@@ -42,7 +42,7 @@ void image2Matrix(const Mat &image, const struct pBox *pbox){
     if (pbox->pdata == NULL){
         return;
     }
-    mydataFmt *p = pbox->pdata;
+    float *p = pbox->pdata;
     for (int rowI = 0; rowI < image.rows; rowI++){
         for (int colK = 0; colK < image.cols; colK++){
             *p = (image.at<Vec3b>(rowI, colK)[0] - 127.5)*0.0078125;//opencvµÄÍ¨µÀÅÅÐòÊÇRGB
@@ -60,14 +60,14 @@ void featurePadInit(const pBox *pbox, pBox *outpBox, const int pad){
     outpBox->channel = pbox->channel;
     outpBox->height = pbox->height + 2 * pad;
     outpBox->width = pbox->width + 2 * pad;
-    long RowByteNum= outpBox->width*sizeof(mydataFmt);
-    outpBox->pdata = (mydataFmt *)malloc(outpBox->channel*outpBox->height*RowByteNum);
+    long RowByteNum= outpBox->width*sizeof(float);
+    outpBox->pdata = (float *)malloc(outpBox->channel*outpBox->height*RowByteNum);
     if(outpBox->pdata==NULL)cout<<"the featurePadInit is failed!!"<<endl;
     memset(outpBox->pdata, 0, outpBox->channel*outpBox->height*RowByteNum);
 }
 void featurePad(const pBox *pbox, const pBox *outpBox, const int pad){
-    mydataFmt *p = outpBox->pdata;
-    mydataFmt *pIn = pbox->pdata;
+    float *p = outpBox->pdata;
+    float *pIn = pbox->pdata;
 
     for (int row = 0; row < outpBox->channel*outpBox->height;row++){
         
@@ -76,7 +76,7 @@ void featurePad(const pBox *pbox, const pBox *outpBox, const int pad){
             continue;
         }
         p += pad;
-        memcpy(p, pIn, pbox->width*sizeof(mydataFmt));
+        memcpy(p, pIn, pbox->width*sizeof(float));
         p += pbox->width + pad;
         pIn += pbox->width;
     }
@@ -90,9 +90,9 @@ void feature2MatrixInit(const pBox *pbox, pBox *Matrix, const Weight *weight){
     Matrix->width = pbox->channel*kernelSize*kernelSize;//Î´×ªÖÃÇ°µÄ¿í¶È
     Matrix->height = w_out*h_out;
     Matrix->channel = 1;
-    Matrix->pdata = (mydataFmt *)malloc(Matrix->width*Matrix->height*sizeof(mydataFmt));
+    Matrix->pdata = (float *)malloc(Matrix->width*Matrix->height*sizeof(float));
     if(Matrix->pdata==NULL)cout<<"the feature2MatrixInit failed!!"<<endl;
-    memset(Matrix->pdata, 0, Matrix->width*Matrix->height*sizeof(mydataFmt));
+    memset(Matrix->pdata, 0, Matrix->width*Matrix->height*sizeof(float));
 }
 void feature2Matrix(const pBox *pbox, pBox *Matrix, const Weight *weight){
     if (pbox->pdata == NULL){
@@ -104,9 +104,9 @@ void feature2Matrix(const pBox *pbox, pBox *Matrix, const Weight *weight){
     int w_out = (pbox->width - kernelSize) / stride + 1;//Õâ¸ö¹«Ê½Ò»¶¨Òª¸ãÇå³þ£¬¿ÉÒÔ×Ô¼ºÈ¥»­¸ö¾ØÕó¿´¿´
     int h_out = (pbox->height - kernelSize) / stride + 1;
     
-    mydataFmt *p = Matrix->pdata;
-    mydataFmt *pIn;
-    mydataFmt * ptemp;
+    float *p = Matrix->pdata;
+    float *pIn;
+    float * ptemp;
     for (int row = 0; row< h_out; row ++){
         for (int col = 0; col < w_out; col++){
             pIn = pbox->pdata + row*stride*pbox->width + col*stride;
@@ -114,7 +114,7 @@ void feature2Matrix(const pBox *pbox, pBox *Matrix, const Weight *weight){
             for (int channel = 0; channel < pbox->channel; channel++){
                 ptemp = pIn + channel*pbox->height*pbox->width;
                 for (int kernelRow = 0; kernelRow < kernelSize; kernelRow++){
-                    memcpy(p, ptemp, kernelSize*sizeof(mydataFmt));
+                    memcpy(p, ptemp, kernelSize*sizeof(float));
                     p += kernelSize;
                     ptemp += pbox->width;
                 }
@@ -126,9 +126,9 @@ void convolutionInit(const Weight *weight, const pBox *pbox, pBox *outpBox, cons
 	outpBox->channel = weight->selfChannel;
     outpBox->width = (pbox->width - weight->kernelSize) / weight->stride + 1;
     outpBox->height = (pbox->height - weight->kernelSize) / weight->stride + 1;
-    outpBox->pdata = (mydataFmt *)malloc(weight->selfChannel*matrix->height*sizeof(mydataFmt));
+    outpBox->pdata = (float *)malloc(weight->selfChannel*matrix->height*sizeof(float));
     if(outpBox->pdata==NULL)cout<<"the convolutionInit is failed!!"<<endl;
-    memset(outpBox->pdata , 0, weight->selfChannel*matrix->height*sizeof(mydataFmt));
+    memset(outpBox->pdata , 0, weight->selfChannel*matrix->height*sizeof(float));
 }
 void convolution(const Weight *weight, const pBox *pbox, pBox *outpBox, const struct pBox *matrix){
     if (pbox->pdata == NULL){
@@ -158,19 +158,19 @@ void maxPoolingInit(const pBox *pbox, pBox *Matrix, int kernelSize, int stride){
     Matrix->width = ceil((float)(pbox->width - kernelSize) / stride + 1);
     Matrix->height = ceil((float)(pbox->height - kernelSize) / stride + 1);
     Matrix->channel = pbox->channel;
-    Matrix->pdata = (mydataFmt *)malloc(Matrix->channel*Matrix->width*Matrix->height*sizeof(mydataFmt));
+    Matrix->pdata = (float *)malloc(Matrix->channel*Matrix->width*Matrix->height*sizeof(float));
     if(Matrix->pdata==NULL)cout<<"the maxPoolingInit is failed!!"<<endl;
-    memset(Matrix->pdata, 0, Matrix->channel*Matrix->width*Matrix->height*sizeof(mydataFmt));
+    memset(Matrix->pdata, 0, Matrix->channel*Matrix->width*Matrix->height*sizeof(float));
 }
 void maxPooling(const pBox *pbox, pBox *Matrix, int kernelSize, int stride){
     if (pbox->pdata == NULL){
         cout << "the feature2Matrix pbox is NULL!!" << endl;
         return;
     }
-    mydataFmt *p = Matrix->pdata;
-    mydataFmt *pIn;
-    mydataFmt *ptemp;
-    mydataFmt maxNum = 0;
+    float *p = Matrix->pdata;
+    float *pIn;
+    float *ptemp;
+    float maxNum = 0;
     if((pbox->width-kernelSize)%stride==0){
         for (int row = 0; row< Matrix->height; row ++){
             for (int col = 0; col < Matrix->width; col++){
@@ -212,7 +212,7 @@ void maxPooling(const pBox *pbox, pBox *Matrix, int kernelSize, int stride){
         }
     }
 }
-void relu(struct pBox *pbox, mydataFmt *pbias){
+void relu(struct pBox *pbox, float *pbias){
     if (pbox->pdata == NULL){
         cout << "the  Relu feature is NULL!!" << endl;
         return;
@@ -221,8 +221,8 @@ void relu(struct pBox *pbox, mydataFmt *pbias){
         cout << "the  Relu bias is NULL!!" << endl;
         return;
     }
-    mydataFmt *op = pbox->pdata;
-    mydataFmt *pb = pbias;
+    float *op = pbox->pdata;
+    float *pb = pbias;
 
     long dis = pbox->width*pbox->height;
     for(int channel =0;channel<pbox->channel; channel++){
@@ -234,7 +234,7 @@ void relu(struct pBox *pbox, mydataFmt *pbias){
         pb++;
     }
 }
-void prelu(struct pBox *pbox, mydataFmt *pbias, mydataFmt *prelu_gmma){
+void prelu(struct pBox *pbox, float *pbias, float *prelu_gmma){
     if (pbox->pdata == NULL){
         cout << "the  Relu feature is NULL!!" << endl;
         return;
@@ -243,9 +243,9 @@ void prelu(struct pBox *pbox, mydataFmt *pbias, mydataFmt *prelu_gmma){
         cout << "the  Relu bias is NULL!!" << endl;
         return;
     }
-    mydataFmt *op = pbox->pdata;
-    mydataFmt *pb = pbias;
-    mydataFmt *pg = prelu_gmma;
+    float *op = pbox->pdata;
+    float *pb = pbias;
+    float *pg = prelu_gmma;
 
     long dis = pbox->width*pbox->height;
     for(int channel =0;channel<pbox->channel; channel++){
@@ -263,9 +263,9 @@ void fullconnectInit(const Weight *weight, pBox *outpBox){
     outpBox->channel = weight->selfChannel;
     outpBox->width = 1;
     outpBox->height = 1;
-    outpBox->pdata = (mydataFmt *)malloc(weight->selfChannel*sizeof(mydataFmt));
+    outpBox->pdata = (float *)malloc(weight->selfChannel*sizeof(float));
     if(outpBox->pdata==NULL)cout<<"the fullconnectInit is failed!!"<<endl;
-    memset(outpBox->pdata, 0, weight->selfChannel*sizeof(mydataFmt));
+    memset(outpBox->pdata, 0, weight->selfChannel*sizeof(float));
 }
 void fullconnect(const Weight *weight, const pBox *pbox, pBox *outpBox){
     if (pbox->pdata == NULL){
@@ -276,12 +276,12 @@ void fullconnect(const Weight *weight, const pBox *pbox, pBox *outpBox){
         cout << "the fc weight is NULL!!" << endl;
         return;
     }
-    memset(outpBox->pdata, 0, weight->selfChannel*sizeof(mydataFmt));
+    memset(outpBox->pdata, 0, weight->selfChannel*sizeof(float));
     //Y←αAX + βY    β must be 0(zero)
     //               row         no trans         A's row               A'col
     cblas_sgemv(CblasRowMajor, CblasNoTrans, weight->selfChannel, weight->lastChannel, 1, weight->pdata, weight->lastChannel, pbox->pdata, 1, 0, outpBox->pdata, 1);
 }
-void readData(string filename, long dataNumber[], mydataFmt *pTeam[]){
+void readData(string filename, long dataNumber[], float *pTeam[]){
     
     ifstream in(filename.data());
     string line;
@@ -327,32 +327,32 @@ long initConvAndFc(struct Weight *weight, int schannel, int lchannel, int kersiz
     weight->kernelSize = kersize;
     weight->stride = stride;
     weight->pad = pad;
-    weight->pbias = (mydataFmt *)malloc(schannel*sizeof(mydataFmt));
+    weight->pbias = (float *)malloc(schannel*sizeof(float));
     if(weight->pbias==NULL)cout<<"neicun muyou shenqing chengong!!";
-    memset(weight->pbias, 0, schannel*sizeof(mydataFmt));
+    memset(weight->pbias, 0, schannel*sizeof(float));
     long byteLenght = weight->selfChannel*weight->lastChannel*weight->kernelSize*weight->kernelSize;
-    weight->pdata = (mydataFmt *)malloc(byteLenght*sizeof(mydataFmt));
+    weight->pdata = (float *)malloc(byteLenght*sizeof(float));
     if(weight->pdata==NULL)cout<<"neicun muyou shenqing chengong!!";
-    memset(weight->pdata, 0, byteLenght*sizeof(mydataFmt));
+    memset(weight->pdata, 0, byteLenght*sizeof(float));
 
     return byteLenght;
 }
 void initpRelu(struct pRelu *prelu, int width){
 
     prelu->width = width;
-    prelu->pdata = (mydataFmt *)malloc(width*sizeof(mydataFmt));
+    prelu->pdata = (float *)malloc(width*sizeof(float));
     if(prelu->pdata==NULL)cout<<"prelu apply for memory failed!!!!";
-    memset(prelu->pdata, 0, width*sizeof(mydataFmt));
+    memset(prelu->pdata, 0, width*sizeof(float));
 }
 void softmax(const struct pBox *pbox){
     if(pbox->pdata==NULL){
         cout<<"the softmax's pdata is NULL , Please check !"<<endl;
         return;
     }
-    mydataFmt *p2D = pbox->pdata;
-    mydataFmt *p3D = NULL;
+    float *p2D = pbox->pdata;
+    float *p3D = NULL;
     long mapSize = pbox->width*pbox->height;
-    mydataFmt eleSum = 0;
+    float eleSum = 0;
     for(int row=0;row<pbox->height;row++){
         for(int col=0;col<pbox->width;col++){
             eleSum = 0;

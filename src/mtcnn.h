@@ -10,7 +10,7 @@ public:
     void run(Mat &image, float scale);
 
     float nms_threshold;
-    mydataFmt Pthreshold;
+    float Pthreshold;
     bool firstFlag;
     vector<struct Bbox> boundingBox_;
     vector<orderScore> bboxScore_;
@@ -44,7 +44,7 @@ private:
     struct Weight *conv4c1_wb;
     struct Weight *conv4c2_wb;
 
-    void generateBbox(const struct pBox *score, const struct pBox *location, mydataFmt scale);
+    void generateBbox(const struct pBox *score, const struct pBox *location, float scale);
 };
 
 class Rnet

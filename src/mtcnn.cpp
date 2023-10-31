@@ -40,7 +40,7 @@ Pnet::Pnet(){
     long conv4c1 = initConvAndFc(this->conv4c1_wb, 2, 32, 1, 1, 0);
     long conv4c2 = initConvAndFc(this->conv4c2_wb, 4, 32, 1, 1, 0);
     long dataNumber[13] = {conv1,10,10, conv2,16,16, conv3,32,32, conv4c1,2, conv4c2,4};
-    mydataFmt *pointTeam[13] = {this->conv1_wb->pdata, this->conv1_wb->pbias, this->prelu_gmma1->pdata, \
+    float *pointTeam[13] = {this->conv1_wb->pdata, this->conv1_wb->pbias, this->prelu_gmma1->pdata, \
                             this->conv2_wb->pdata, this->conv2_wb->pbias, this->prelu_gmma2->pdata, \
                             this->conv3_wb->pdata, this->conv3_wb->pbias, this->prelu_gmma3->pdata, \
                             this->conv4c1_wb->pdata, this->conv4c1_wb->pbias, \
@@ -124,14 +124,14 @@ void Pnet::run(Mat &image, float scale){
     //softmax layer
     generateBbox(this->score_, this->location_, scale);
 }
-void Pnet::generateBbox(const struct pBox *score, const struct pBox *location, mydataFmt scale){
+void Pnet::generateBbox(const struct pBox *score, const struct pBox *location, float scale){
     //for pooling 
     int stride = 2;
     int cellsize = 12;
     int count = 0;
     //score p
-    mydataFmt *p = score->pdata + score->width*score->height;
-    mydataFmt *plocal = location->pdata;
+    float *p = score->pdata + score->width*score->height;
+    float *plocal = location->pdata;
     struct Bbox bbox;
     struct orderScore order;
     for(int row=0;row<score->height;row++){
@@ -200,7 +200,7 @@ Rnet::Rnet(){
     long score = initConvAndFc(this->score_wb, 2, 128, 1, 1, 0);
     long location = initConvAndFc(this->location_wb, 4, 128, 1, 1, 0);
     long dataNumber[16] = {conv1,28,28, conv2,48,48, conv3,64,64, fc4,128,128, score,2, location,4};
-    mydataFmt *pointTeam[16] = {this->conv1_wb->pdata, this->conv1_wb->pbias, this->prelu_gmma1->pdata, \
+    float *pointTeam[16] = {this->conv1_wb->pdata, this->conv1_wb->pbias, this->prelu_gmma1->pdata, \
                                 this->conv2_wb->pdata, this->conv2_wb->pbias, this->prelu_gmma2->pdata, \
                                 this->conv3_wb->pdata, this->conv3_wb->pbias, this->prelu_gmma3->pdata, \
                                 this->fc4_wb->pdata, this->fc4_wb->pbias, this->prelu_gmma4->pdata, \
@@ -254,9 +254,9 @@ void Rnet::RnetImage2MatrixInit(struct pBox *pbox){
     pbox->height = 24;
     pbox->width = 24;
     
-    pbox->pdata = (mydataFmt *)malloc(pbox->channel*pbox->height*pbox->width*sizeof(mydataFmt));
+    pbox->pdata = (float *)malloc(pbox->channel*pbox->height*pbox->width*sizeof(float));
     if(pbox->pdata==NULL)cout<<"the image2MatrixInit is failed!!"<<endl;
-    memset(pbox->pdata, 0, pbox->channel*pbox->height*pbox->width*sizeof(mydataFmt));
+    memset(pbox->pdata, 0, pbox->channel*pbox->height*pbox->width*sizeof(float));
 }
 void Rnet::run(Mat &image){
     image2Matrix(image, this->rgb);
@@ -346,7 +346,7 @@ Onet::Onet(){
     long location = initConvAndFc(this->location_wb, 4, 256, 1, 1, 0);
     long keyPoint = initConvAndFc(this->keyPoint_wb, 10, 256, 1, 1, 0);
     long dataNumber[21] = {conv1,32,32, conv2,64,64, conv3,64,64, conv4,128,128, fc5,256,256, score,2, location,4, keyPoint,10};
-    mydataFmt *pointTeam[21] = {this->conv1_wb->pdata, this->conv1_wb->pbias, this->prelu_gmma1->pdata, \
+    float *pointTeam[21] = {this->conv1_wb->pdata, this->conv1_wb->pbias, this->prelu_gmma1->pdata, \
                                 this->conv2_wb->pdata, this->conv2_wb->pbias, this->prelu_gmma2->pdata, \
                                 this->conv3_wb->pdata, this->conv3_wb->pbias, this->prelu_gmma3->pdata, \
                                 this->conv4_wb->pdata, this->conv4_wb->pbias, this->prelu_gmma4->pdata, \
@@ -418,9 +418,9 @@ void Onet::OnetImage2MatrixInit(struct pBox *pbox){
     pbox->height = 48;
     pbox->width = 48;
     
-    pbox->pdata = (mydataFmt *)malloc(pbox->channel*pbox->height*pbox->width*sizeof(mydataFmt));
+    pbox->pdata = (float *)malloc(pbox->channel*pbox->height*pbox->width*sizeof(float));
     if(pbox->pdata==NULL)cout<<"the image2MatrixInit is failed!!"<<endl;
-    memset(pbox->pdata, 0, pbox->channel*pbox->height*pbox->width*sizeof(mydataFmt));
+    memset(pbox->pdata, 0, pbox->channel*pbox->height*pbox->width*sizeof(float));
 }
 void Onet::run(Mat &image){
     image2Matrix(image, this->rgb);
@@ -544,7 +544,7 @@ void mtcnn::findFace(Mat &image){
             resize(image(temp), secImage, Size(24, 24), 0, 0, cv::INTER_LINEAR);
             refineNet.run(secImage);
             if(*(refineNet.score_->pdata+1)>refineNet.Rthreshold){
-                memcpy(it->regreCoord, refineNet.location_->pdata, 4*sizeof(mydataFmt));
+                memcpy(it->regreCoord, refineNet.location_->pdata, 4*sizeof(float));
                 it->area = (it->x2 - it->x1)*(it->y2 - it->y1);
                 it->score = *(refineNet.score_->pdata+1);
                 secondBbox_.push_back(*it);
@@ -569,9 +569,9 @@ void mtcnn::findFace(Mat &image){
             Mat thirdImage;
             resize(image(temp), thirdImage, Size(48, 48), 0, 0, cv::INTER_LINEAR);
             outNet.run(thirdImage);
-            mydataFmt *pp=NULL;
+            float *pp=NULL;
             if(*(outNet.score_->pdata+1)>outNet.Othreshold){
-                memcpy(it->regreCoord, outNet.location_->pdata, 4*sizeof(mydataFmt));
+                memcpy(it->regreCoord, outNet.location_->pdata, 4*sizeof(float));
                 it->area = (it->x2 - it->x1)*(it->y2 - it->y1);
                 it->score = *(outNet.score_->pdata+1);
                 pp = outNet.keyPoint_->pdata;
