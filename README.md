@@ -1,6 +1,6 @@
 # MTCNN-light
 ## Introduction
-this repository is the implementation of MTCNN with no framework,  Just need opencv and openblas.  
+this repository is the implementation of MTCNN with no framework, only depend on opencv and openblas.  
 "Joint Face Detection and Alignment using Multi-task Cascaded Convolutional Neural Networks", implemented with C++，no framework  
 it is very easy for you to use.  
 it is can be a part of your project with no framework, like caffe and mxnet.  
@@ -89,7 +89,7 @@ save and exit
 
 ## How to Run
 ```
-cd products
+cd products/bin
 
 # 1. run default
 ./mtcnn
@@ -100,6 +100,5 @@ cd products
 
 ## for windows    
 ### opencv and openblas    
-there is binary packages of openblas for windows, you just need download it   
-But you should to be careful, if you download the 64bit ,you need configure    
-the opencv and vs project environment with 64bit, don't choose x86
+There have binary packages of openblas for windows, all you needed is download it to local.   
+Please be careful, if you download the 64bit, you need configure the opencv and vs project environment with 64bit rather than x86
