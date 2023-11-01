@@ -2,8 +2,7 @@
 #define MTCNN_H
 #include "network.h"
 
-class Pnet
-{
+class Pnet {
 public:
     Pnet();
     ~Pnet();
@@ -47,8 +46,7 @@ private:
     void generateBbox(const struct pBox *score, const struct pBox *location, float scale);
 };
 
-class Rnet
-{
+class Rnet {
 public:
     Rnet();
     ~Rnet();
@@ -87,8 +85,7 @@ private:
     void RnetImage2MatrixInit(struct pBox *pbox);
 };
 
-class Onet
-{
+class Onet {
 public:
     Onet();
     ~Onet();
@@ -133,8 +130,7 @@ private:
     void OnetImage2MatrixInit(struct pBox *pbox);
 };
 
-class mtcnn
-{
+class mtcnn {
 public:
     mtcnn(int row, int col);
     ~mtcnn();

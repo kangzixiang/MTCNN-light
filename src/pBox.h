@@ -5,22 +5,19 @@
 
 using namespace std;
 
-struct pBox
-{
+struct pBox {
 	float *pdata;
 	int width;
 	int height;
 	int channel;
 };
 
-struct pRelu
-{
+struct pRelu {
     float *pdata;
     int width;
 };
 
-struct Weight
-{
+struct Weight {
 	float *pdata;
     float *pbias;
     int lastChannel;
@@ -30,8 +27,7 @@ struct Weight
     int pad;
 };
 
-struct Bbox
-{
+struct Bbox {
     float score;
     int x1;
     int y1;
@@ -43,8 +39,7 @@ struct Bbox
     float regreCoord[4];
 };
 
-struct orderScore
-{
+struct orderScore {
     float score;
     int oriOrder;
 };
@@ -56,4 +51,5 @@ void pBoxShow(const struct pBox *pbox);
 void pBoxShowE(const struct pBox *pbox,int channel, int row);
 void weightShow(const struct Weight *weight);
 void pReluShow(const struct pRelu *prelu);
+
 #endif

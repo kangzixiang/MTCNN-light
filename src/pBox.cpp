@@ -1,7 +1,8 @@
 #include"pBox.h"
 
 void freepBox(struct pBox *pbox){
-	if(pbox->pdata==NULL)cout<<"pbox is NULL!"<<endl;
+	if(pbox->pdata==NULL)
+		cout << "pbox is NULL!" << endl;
 	else 
 		free(pbox->pdata);
 	pbox->pdata = NULL;
@@ -9,7 +10,8 @@ void freepBox(struct pBox *pbox){
 }
 
 void freepRelu(struct pRelu *prelu){
-	if(prelu->pdata==NULL)cout<<"prelu is NULL!"<<endl;
+	if(prelu->pdata==NULL)
+		cout << "prelu is NULL!" << endl;
 	else 
 		free(prelu->pdata);
 	prelu->pdata = NULL;
@@ -17,7 +19,8 @@ void freepRelu(struct pRelu *prelu){
 }
 
 void freeWeight(struct Weight *weight){
-	if(weight->pdata==NULL)cout<<"weight is NULL!"<<endl;
+	if(weight->pdata==NULL)
+		cout << "weight is NULL!" << endl;
 	else 
 		free(weight->pdata);
 	weight->pdata = NULL;
@@ -53,20 +56,21 @@ void pBoxShowE(const struct pBox *pbox,int channel, int row){
 	cout << "the data is :" << endl;
 	float *p = pbox->pdata + channel*pbox->width*pbox->height;
 	//pbox->channel
-	cout << "the " << channel <<"th channel data is :"<< endl;
+	cout << "the " << channel << "th channel data is :" << endl;
 	//pbox->height
 
 	for (int i = 0; i < pbox->height; i++){
-		if(i<0){
+		if(i < 0){
 			for (int k = 0; k < pbox->width; k++){
 				cout << *p++ << " ";
 			}
 			cout << endl;
 		}
-		else if(i==row){
-			p += i*pbox->width;
+		else if (i == row){
+			p += i * pbox->width;
 			for (int k = 0; k < pbox->width; k++){
-				if(k%4==0)cout<<endl;
+				if (k % 4 == 0)
+					cout << endl;
 				cout << *p++ << " ";
 			}
 			cout << endl;
@@ -76,7 +80,7 @@ void pBoxShowE(const struct pBox *pbox,int channel, int row){
 }
 
 void pReluShow(const struct pRelu *prelu){
-	if (prelu->pdata == NULL){
+	if (prelu->pdata == NULL) {
 		cout << "the prelu is NULL, please check it !" << endl;
 		return;
 	}

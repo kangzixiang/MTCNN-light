@@ -3,6 +3,7 @@
 //date 2017.5.21,20:27
 #ifndef NETWORK_H
 #define NETWORK_H
+
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
 #include <algorithm>
@@ -14,6 +15,7 @@
 #include <string>
 #include <math.h>
 #include "pBox.h"
+
 using namespace cv;
 
 void addbias(struct pBox *pbox, float *pbias);

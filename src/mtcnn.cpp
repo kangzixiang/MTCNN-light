@@ -49,6 +49,7 @@ Pnet::Pnet(){
     string filename = "Pnet.txt";
     readData(filename, dataNumber, pointTeam);
 }
+
 Pnet::~Pnet(){
     freepBox(this->rgb);
     freepBox(this->conv1);
@@ -124,6 +125,7 @@ void Pnet::run(Mat &image, float scale){
     //softmax layer
     generateBbox(this->score_, this->location_, scale);
 }
+
 void Pnet::generateBbox(const struct pBox *score, const struct pBox *location, float scale){
     //for pooling 
     int stride = 2;
@@ -224,6 +226,7 @@ Rnet::Rnet(){
     fullconnectInit(this->score_wb, this->score_);
     fullconnectInit(this->location_wb, this->location_);
 }
+
 Rnet::~Rnet(){
     freepBox(this->rgb);
     freepBox(this->conv1_matrix);
@@ -249,6 +252,7 @@ Rnet::~Rnet(){
     freeWeight(this->score_wb);
     freeWeight(this->location_wb);
 }
+
 void Rnet::RnetImage2MatrixInit(struct pBox *pbox){
     pbox->channel = 3;
     pbox->height = 24;
@@ -258,6 +262,7 @@ void Rnet::RnetImage2MatrixInit(struct pBox *pbox){
     if(pbox->pdata==NULL)cout<<"the image2MatrixInit is failed!!"<<endl;
     memset(pbox->pdata, 0, pbox->channel*pbox->height*pbox->width*sizeof(float));
 }
+
 void Rnet::run(Mat &image){
     image2Matrix(image, this->rgb);
 
@@ -381,6 +386,7 @@ Onet::Onet(){
     fullconnectInit(this->location_wb, this->location_);
     fullconnectInit(this->keyPoint_wb, this->keyPoint_);
 }
+
 Onet::~Onet(){
     freepBox(this->rgb);
     freepBox(this->conv1_matrix);
@@ -413,6 +419,7 @@ Onet::~Onet(){
     freeWeight(this->location_wb);
     freeWeight(this->keyPoint_wb);
 }
+
 void Onet::OnetImage2MatrixInit(struct pBox *pbox){
     pbox->channel = 3;
     pbox->height = 48;
@@ -422,6 +429,7 @@ void Onet::OnetImage2MatrixInit(struct pBox *pbox){
     if(pbox->pdata==NULL)cout<<"the image2MatrixInit is failed!!"<<endl;
     memset(pbox->pdata, 0, pbox->channel*pbox->height*pbox->width*sizeof(float));
 }
+
 void Onet::run(Mat &image){
     image2Matrix(image, this->rgb);
 
@@ -467,7 +475,6 @@ void Onet::run(Mat &image){
     addbias(this->keyPoint_, this->keyPoint_wb->pbias);
     // pBoxShow(keyPoint_);
 }
-
 
 mtcnn::mtcnn(int row, int col){
     nms_threshold[0] = 0.7;
