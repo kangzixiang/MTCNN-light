@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
+project(MTCNN-light)
 
 function (add_subdirectory_if_exist arg)
     message(STATUS "add_subdirectory_if_exist: ${CMAKE_CURRENT_SOURCE_DIR}/${ARGV0}/CMakeLists.txt")
