@@ -92,10 +92,10 @@ save and exit
 cd products/bin
 
 # 1. run default
-./mtcnn
+./mtcnn_image
 
 # 2. run customize
-./mtcnn [image path]
+./mtcnn_image [image path]
 ```
 
 ## for windows    
