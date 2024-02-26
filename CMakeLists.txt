@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.22.1)
 project(MTCNN-light)
 
 function (add_subdirectory_if_exist arg)
