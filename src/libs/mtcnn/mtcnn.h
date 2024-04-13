@@ -2,7 +2,8 @@
 #define MTCNN_H
 #include "network.h"
 
-class Pnet {
+class Pnet
+{
 public:
     Pnet();
     ~Pnet();
@@ -13,27 +14,28 @@ public:
     bool firstFlag;
     vector<struct Bbox> boundingBox_;
     vector<orderScore> bboxScore_;
+
 private:
-    //the image for mxnet conv
+    // the image for mxnet conv
     struct pBox *rgb;
     struct pBox *conv1_matrix;
-    //the 1th layer's out conv
+    // the 1th layer's out conv
     struct pBox *conv1;
     struct pBox *maxPooling1;
     struct pBox *maxPooling_matrix;
-    //the 3th layer's out
+    // the 3th layer's out
     struct pBox *conv2;
     struct pBox *conv3_matrix;
-    //the 4th layer's out   out
+    // the 4th layer's out   out
     struct pBox *conv3;
     struct pBox *score_matrix;
-    //the 4th layer's out   out
+    // the 4th layer's out   out
     struct pBox *score_;
-    //the 4th layer's out   out
+    // the 4th layer's out   out
     struct pBox *location_matrix;
     struct pBox *location_;
 
-    //Weight
+    // Weight
     struct Weight *conv1_wb;
     struct pRelu *prelu_gmma1;
     struct Weight *conv2_wb;
@@ -46,7 +48,8 @@ private:
     void generateBbox(const struct pBox *score, const struct pBox *location, float scale);
 };
 
-class Rnet {
+class Rnet
+{
 public:
     Rnet();
     ~Rnet();
@@ -54,6 +57,7 @@ public:
     void run(Mat &image);
     struct pBox *score_;
     struct pBox *location_;
+
 private:
     struct pBox *rgb;
 
@@ -69,8 +73,8 @@ private:
     struct pBox *conv3_out;
 
     struct pBox *fc4_out;
-    
-    //Weight
+
+    // Weight
     struct Weight *conv1_wb;
     struct pRelu *prelu_gmma1;
     struct Weight *conv2_wb;
@@ -85,7 +89,8 @@ private:
     void RnetImage2MatrixInit(struct pBox *pbox);
 };
 
-class Onet {
+class Onet
+{
 public:
     Onet();
     ~Onet();
@@ -94,6 +99,7 @@ public:
     struct pBox *score_;
     struct pBox *location_;
     struct pBox *keyPoint_;
+
 private:
     struct pBox *rgb;
     struct pBox *conv1_matrix;
@@ -113,7 +119,7 @@ private:
 
     struct pBox *fc5_out;
 
-    //Weight
+    // Weight
     struct Weight *conv1_wb;
     struct pRelu *prelu_gmma1;
     struct Weight *conv2_wb;
@@ -130,11 +136,13 @@ private:
     void OnetImage2MatrixInit(struct pBox *pbox);
 };
 
-class mtcnn {
+class mtcnn
+{
 public:
     mtcnn(int row, int col);
     ~mtcnn();
     void findFace(Mat &image);
+
 private:
     Mat reImage;
     float nms_threshold[3];

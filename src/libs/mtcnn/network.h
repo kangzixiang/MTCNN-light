@@ -1,6 +1,6 @@
-//c++ network  author : liqi
-//Nangjing University of Posts and Telecommunications
-//date 2017.5.21,20:27
+// c++ network  author : liqi
+// Nangjing University of Posts and Telecommunications
+// date 2017.5.21,20:27
 #ifndef NETWORK_H
 #define NETWORK_H
 
@@ -38,7 +38,6 @@ void maxPoolingInit(const pBox *pbox, pBox *Matrix, int kernelSize, int stride);
 void feature2MatrixInit(const pBox *pbox, pBox *Matrix, const Weight *weight);
 void convolutionInit(const Weight *weight, const pBox *pbox, pBox *outpBox, const struct pBox *matrix);
 void fullconnectInit(const Weight *weight, pBox *outpBox);
-
 
 bool cmpScore(struct orderScore lsh, struct orderScore rsh);
 void nms(vector<struct Bbox> &boundingBox_, vector<struct orderScore> &bboxScore_, const float overlap_threshold, string modelname = "Union");
